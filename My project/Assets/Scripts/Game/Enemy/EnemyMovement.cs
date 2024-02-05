@@ -12,10 +12,12 @@ public class EnemyMovement : MonoBehaviour
     private Rigidbody2D _rigidbody;
     private PlayerAwarenessController _playerAwarenessController;
     private Vector2 _targetDirection;
+    private float _changeDirectionCooldown;
 
     private void Awake() {
         _rigidbody = GetComponent<Rigidbody2D>();
         _playerAwarenessController = GetComponent<PlayerAwarenessController>();
+        _targetDirection = transform.up;
     }
 
     // Update is called once per frame
@@ -27,20 +29,29 @@ public class EnemyMovement : MonoBehaviour
     }
 
     private void UpdateTargetDirection() {
+        HandleRandomDirectionChange();
+        HandlePlayerTargeting();
+    }
+
+    private void HandleRandomDirectionChange() {
+        _changeDirectionCooldown -= Time.deltaTime;
+
+        if (_changeDirectionCooldown <= 0) {
+            float angleChange = Random.Range(-90f, 90f);
+            Quaternion rotation = Quaternion.AngleAxis(angleChange, transform.forward);
+            _targetDirection = rotation * _targetDirection;
+
+            _changeDirectionCooldown = Random.Range(1f, 5f);
+        }
+    }
+
+    private void HandlePlayerTargeting() {
         if (_playerAwarenessController.AwareOfPlayer) {
             _targetDirection = _playerAwarenessController.DirectionToPlayer;
-
-        } else {
-            _targetDirection = Vector2.zero;
         }
     }
 
     private void RotateTowardsTarget() {
-        if (_targetDirection == Vector2.zero) {
-            return ;
-
-        }
-
         Quaternion targetRotation = Quaternion.LookRotation(transform.forward, _targetDirection);
         Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
 
@@ -48,11 +59,6 @@ public class EnemyMovement : MonoBehaviour
     }
 
     private void SetVelocity() {
-        if (_targetDirection == Vector2.zero) {
-            _rigidbody.velocity = Vector2.zero;
-
-        } else {
             _rigidbody.velocity = transform.up * _speed;
-        }
     }
 }
