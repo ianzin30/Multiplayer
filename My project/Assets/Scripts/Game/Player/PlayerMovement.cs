@@ -6,15 +6,20 @@ using UnityEngine.InputSystem;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
-    private float _speed;
+    private float _speed = 5;
     private Rigidbody2D _rigidbody;
     private Vector2 _movementInput;
+    private Vector2 _smoothedMovementInput;
+    private Vector2 _movementInputSmoothVelocity;
+    private float _accelerationDelay = 0.1f;
+
     private void Awake() {
         _rigidbody = GetComponent<Rigidbody2D>();
     }
 
     private void FixedUpdate() {
-        _rigidbody.velocity = _movementInput * _speed;
+        _smoothedMovementInput = Vector2.SmoothDamp(_smoothedMovementInput, _movementInput, ref _movementInputSmoothVelocity, _accelerationDelay);
+        _rigidbody.velocity = _smoothedMovementInput * _speed;
     }
 
     // updates whenever the player object moves
