@@ -24,7 +24,7 @@ public class HealthController : MonoBehaviour
 
         if (!IsInvincible) {
             _currentHealth -= damageAmount;
-
+            OnHealthCHange.Invoke();
             if (_currentHealth < 0) {
                 _currentHealth = 0;
             }
@@ -44,7 +44,8 @@ public class HealthController : MonoBehaviour
         }
 
         _currentHealth += amountToAdd;
-
+        OnHealthCHange.Invoke();
+        
         if (_currentHealth > _maximumHeath) {
             _currentHealth = _maximumHeath;
         }
@@ -52,4 +53,5 @@ public class HealthController : MonoBehaviour
 
     public UnityEvent OnDied;
     public UnityEvent OnDamage;
+    public UnityEvent OnHealthCHange;
 }
