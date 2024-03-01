@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 77660433980847250}
   - component: {fileID: 8050485734367027618}
   - component: {fileID: -7530882184775976458}
-  - component: {fileID: 551148198758591830}
+  - component: {fileID: 2049139071377241900}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -141,7 +141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damageAmount: 10
---- !u!95 &551148198758591830
+--- !u!95 &2049139071377241900
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
@@ -151,7 +151,7 @@ Animator:
   m_GameObject: {fileID: 1767683423889529999}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 55d6502e419ce474fb4df49a8f7e68b0, type: 2}
+  m_Controller: {fileID: 9100000, guid: 8743fdc16621413479d16f7499786e78, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
