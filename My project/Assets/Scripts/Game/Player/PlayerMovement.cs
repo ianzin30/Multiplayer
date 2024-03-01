@@ -21,11 +21,13 @@ public class PlayerMovement : MonoBehaviour
     private float _screenBorder;
     [SerializeField]
     private Tilemap _tilemap;
+    private Animator _animator;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _camera = Camera.main;
+        _animator = GetComponent<Animator>();
     }
 
     // updated every frame
@@ -33,6 +35,7 @@ public class PlayerMovement : MonoBehaviour
     {
         SetPlayerVelocity();
         RotateInDirectionOfInput();
+        SetAnimation();
     }
 
     private void SetPlayerVelocity()
@@ -70,6 +73,18 @@ public class PlayerMovement : MonoBehaviour
             Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
 
             _rigidbody.MoveRotation(rotation);
+        }
+    }
+
+    private void SetAnimation()
+    {
+        if (_movementInput != Vector2.zero)
+        {
+            _animator.SetBool("isMoving", true);
+        }
+        else
+        {
+            _animator.SetBool("isMoving", false);
         }
     }
 
