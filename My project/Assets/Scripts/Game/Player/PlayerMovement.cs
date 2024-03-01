@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+//using System.Numerics;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Tilemaps;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -17,8 +19,11 @@ public class PlayerMovement : MonoBehaviour
     private Camera _camera;
     [SerializeField]
     private float _screenBorder;
+    [SerializeField]
+    private Tilemap _tilemap;
 
-    private void Awake() {
+    private void Awake()
+    {
         _rigidbody = GetComponent<Rigidbody2D>();
         _camera = Camera.main;
     }
@@ -39,31 +44,44 @@ public class PlayerMovement : MonoBehaviour
         PreventPlayerGoingOffScreen();
     }
 
-    private void PreventPlayerGoingOffScreen() {
-        Vector2 screenPosition = _camera.WorldToScreenPoint(transform.position);
+    private void PreventPlayerGoingOffScreen()
+    {
+        // Vector2 screenPosition = _camera.WorldToScreenPoint(transform.position);
 
-        if ((screenPosition.x <= _screenBorder && _rigidbody.velocity.x < 0) || screenPosition.x >= _camera.pixelWidth - _screenBorder && _rigidbody.velocity.x > 0) {
-            _rigidbody.velocity = new Vector2(0, _rigidbody.velocity.y);
+        // if ((screenPosition.x <= _screenBorder && _rigidbody.velocity.x < 0) || screenPosition.x >= _camera.pixelWidth - _screenBorder && _rigidbody.velocity.x > 0)
+        // {
+        //     _rigidbody.velocity = new Vector2(0, _rigidbody.velocity.y);
+        // }
+
+        // if ((screenPosition.y <= _screenBorder && _rigidbody.velocity.y < 0) || screenPosition.y > _camera.pixelHeight - _screenBorder && _rigidbody.velocity.y > 0)
+        // {
+        //     _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, 0);
+        // }
+
+        Vector3Int playerTilePosition = _tilemap.WorldToCell(transform.position);
+        if (!_tilemap.HasTile(playerTilePosition + Vector3Int.RoundToInt(new Vector3(_rigidbody.velocity.normalized.x, _rigidbody.velocity.normalized.y, 0))))
+        {
+            _rigidbody.velocity = new Vector2(0, 0);
         }
 
-        if ((screenPosition.y <= _screenBorder && _rigidbody.velocity.y < 0) || screenPosition.y > _camera.pixelHeight - _screenBorder && _rigidbody.velocity.y > 0) {
-            _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, 0);
-        }
     }
 
     // updates whenever the player object moves
-    private void OnMove(InputValue inputValue) {
+    private void OnMove(InputValue inputValue)
+    {
         _movementInput = inputValue.Get<Vector2>();
     }
-    
-    private void RotateInDirectionOfInput() {
+
+    private void RotateInDirectionOfInput()
+    {
         // check if the player is moving
-        if (_movementInput != Vector2.zero) {
+        if (_movementInput != Vector2.zero)
+        {
             Quaternion targetRotation = Quaternion.LookRotation(transform.forward, _smoothedMovementInput);
             Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
 
             _rigidbody.MoveRotation(rotation);
         }
     }
-    
+
 }
