@@ -46,18 +46,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void PreventPlayerGoingOffScreen()
     {
-        // Vector2 screenPosition = _camera.WorldToScreenPoint(transform.position);
-
-        // if ((screenPosition.x <= _screenBorder && _rigidbody.velocity.x < 0) || screenPosition.x >= _camera.pixelWidth - _screenBorder && _rigidbody.velocity.x > 0)
-        // {
-        //     _rigidbody.velocity = new Vector2(0, _rigidbody.velocity.y);
-        // }
-
-        // if ((screenPosition.y <= _screenBorder && _rigidbody.velocity.y < 0) || screenPosition.y > _camera.pixelHeight - _screenBorder && _rigidbody.velocity.y > 0)
-        // {
-        //     _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, 0);
-        // }
-
+        // gets the current tile position and sums with the velocity to check if the next tile is a wall
         Vector3Int playerTilePosition = _tilemap.WorldToCell(transform.position);
         if (!_tilemap.HasTile(playerTilePosition + Vector3Int.RoundToInt(new Vector3(_rigidbody.velocity.normalized.x, _rigidbody.velocity.normalized.y, 0))))
         {
