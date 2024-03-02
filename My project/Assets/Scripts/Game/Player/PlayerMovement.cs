@@ -43,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
         // smoothing is used to avoid sudden movements
         _smoothedMovementInput = Vector2.SmoothDamp(_smoothedMovementInput, _movementInput, ref _movementInputSmoothVelocity, _accelerationDelay);
         _rigidbody.velocity = _smoothedMovementInput * _speed; // updates velocity
-
+        //_rigidbody.velocity = _speed * _movementInput;
         PreventPlayerGoingOffScreen();
     }
 
@@ -51,9 +51,16 @@ public class PlayerMovement : MonoBehaviour
     {
         // gets the current tile position and sums with the velocity to check if the next tile is a wall
         Vector3Int playerTilePosition = _tilemap.WorldToCell(transform.position);
-        if (!_tilemap.HasTile(playerTilePosition + Vector3Int.RoundToInt(new Vector3(_rigidbody.velocity.normalized.x, _rigidbody.velocity.normalized.y, 0))))
+        //Vector2 dir = _rigidbody.velocity.normalized;
+
+        if (!_tilemap.HasTile(playerTilePosition + new Vector3Int(1, 0, 0)) && _rigidbody.velocity.x > 0 || !_tilemap.HasTile(playerTilePosition + new Vector3Int(-1, 0, 0)) && _rigidbody.velocity.x < 0)
         {
-            _rigidbody.velocity = new Vector2(0, 0);
+            _rigidbody.velocity = new Vector2(0, _rigidbody.velocity.y);
+        }
+
+        if (!_tilemap.HasTile(playerTilePosition + new Vector3Int(0, 1, 0)) && _rigidbody.velocity.y > 0 || !_tilemap.HasTile(playerTilePosition + new Vector3Int(0, -1, 0)) && _rigidbody.velocity.y < 0)
+        {
+            _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, 0);
         }
 
     }
