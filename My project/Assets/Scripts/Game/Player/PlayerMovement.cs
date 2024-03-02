@@ -43,7 +43,6 @@ public class PlayerMovement : MonoBehaviour
         // smoothing is used to avoid sudden movements
         _smoothedMovementInput = Vector2.SmoothDamp(_smoothedMovementInput, _movementInput, ref _movementInputSmoothVelocity, _accelerationDelay);
         _rigidbody.velocity = _smoothedMovementInput * _speed; // updates velocity
-        //_rigidbody.velocity = _speed * _movementInput;
         //PreventPlayerGoingOffScreen();
     }
 
