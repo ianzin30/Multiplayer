@@ -21,11 +21,13 @@ public class PlayerMovement : MonoBehaviour
     private float _screenBorder;
     [SerializeField]
     private Tilemap _tilemap;
+    private Animator _animator;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         _camera = Camera.main;
+        _animator = GetComponent<Animator>();
     }
 
     // updated every frame
@@ -33,6 +35,7 @@ public class PlayerMovement : MonoBehaviour
     {
         SetPlayerVelocity();
         RotateInDirectionOfInput();
+        SetAnimation();
     }
 
     private void SetPlayerVelocity()
@@ -40,26 +43,25 @@ public class PlayerMovement : MonoBehaviour
         // smoothing is used to avoid sudden movements
         _smoothedMovementInput = Vector2.SmoothDamp(_smoothedMovementInput, _movementInput, ref _movementInputSmoothVelocity, _accelerationDelay);
         _rigidbody.velocity = _smoothedMovementInput * _speed; // updates velocity
-
-        PreventPlayerGoingOffScreen();
+        //PreventPlayerGoingOffScreen();
     }
 
     private void PreventPlayerGoingOffScreen()
     {
-        // Vector2 screenPosition = _camera.WorldToScreenPoint(transform.position);
-
-        // if ((screenPosition.x <= _screenBorder && _rigidbody.velocity.x < 0) || screenPosition.x >= _camera.pixelWidth - _screenBorder && _rigidbody.velocity.x > 0)
-        // {
-        //     _rigidbody.velocity = new Vector2(0, _rigidbody.velocity.y);
-        // }
-
-        // if ((screenPosition.y <= _screenBorder && _rigidbody.velocity.y < 0) || screenPosition.y > _camera.pixelHeight - _screenBorder && _rigidbody.velocity.y > 0)
-        // {
-        //     _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, 0);
-        // }
-
+        // gets the current tile position and sums with the velocity to check if the next tile is a wall
         Vector3Int playerTilePosition = _tilemap.WorldToCell(transform.position);
-        if (!_tilemap.HasTile(playerTilePosition + Vector3Int.RoundToInt(new Vector3(_rigidbody.velocity.normalized.x, _rigidbody.velocity.normalized.y, 0))))
+
+        if (!_tilemap.HasTile(playerTilePosition + new Vector3Int(1, 0, 0)) && _rigidbody.velocity.x > 0 || !_tilemap.HasTile(playerTilePosition + new Vector3Int(-1, 0, 0)) && _rigidbody.velocity.x < 0)
+        {
+            _rigidbody.velocity = new Vector2(0, _rigidbody.velocity.y);
+        }
+
+        if (!_tilemap.HasTile(playerTilePosition + new Vector3Int(0, 1, 0)) && _rigidbody.velocity.y > 0 || !_tilemap.HasTile(playerTilePosition + new Vector3Int(0, -1, 0)) && _rigidbody.velocity.y < 0)
+        {
+            _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, 0);
+        }
+
+        if (!_tilemap.HasTile(playerTilePosition + new Vector3Int(1, 1, 0)) && _rigidbody.velocity.x > 0 && _rigidbody.velocity.y > 0 || !_tilemap.HasTile(playerTilePosition + new Vector3Int(-1, -1, 0)) && _rigidbody.velocity.x < 0 && _rigidbody.velocity.y < 0 || !_tilemap.HasTile(playerTilePosition + new Vector3Int(1, -1, 0)) && _rigidbody.velocity.x > 0 && _rigidbody.velocity.y < 0 || !_tilemap.HasTile(playerTilePosition + new Vector3Int(-1, 1, 0)) && _rigidbody.velocity.x < 0 && _rigidbody.velocity.y > 0)
         {
             _rigidbody.velocity = new Vector2(0, 0);
         }
@@ -81,6 +83,18 @@ public class PlayerMovement : MonoBehaviour
             Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
 
             _rigidbody.MoveRotation(rotation);
+        }
+    }
+
+    private void SetAnimation()
+    {
+        if (_movementInput != Vector2.zero)
+        {
+            _animator.SetBool("isMoving", true);
+        }
+        else
+        {
+            _animator.SetBool("isMoving", false);
         }
     }
 

@@ -14,6 +14,9 @@ GameObject:
   - component: {fileID: 77660433980847250}
   - component: {fileID: 8050485734367027618}
   - component: {fileID: -7530882184775976458}
+  - component: {fileID: 2049139071377241900}
+  - component: {fileID: 5533514634595436133}
+  - component: {fileID: 2749000515958122416}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -76,8 +79,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ff1644535b12c24a85c376fe1ae75cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 1
-  _rotationSpeed: 100
+  _speed: 4
+  _rotationSpeed: 360
   _screenBorder: -30
 --- !u!114 &77660433980847250
 MonoBehaviour:
@@ -140,6 +143,110 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damageAmount: 10
+--- !u!95 &2049139071377241900
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1767683423889529999}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8743fdc16621413479d16f7499786e78, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5533514634595436133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1767683423889529999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc456ab0d2d87dd4bbdf3eb9c55dacb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _currentHealth: 10
+  _maximumHeath: 10
+  OnDied:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2049139071377241900}
+        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
+        m_MethodName: SetTrigger
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: onDied
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 8050485734367027618}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: onDied
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 8370176402561014922}
+        m_TargetAssemblyTypeName: UnityEngine.Behaviour, UnityEngine
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: onDied
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2749000515958122416}
+        m_TargetAssemblyTypeName: EnemyDestoyController, Assembly-CSharp
+        m_MethodName: DestroyEnemy
+        m_Mode: 4
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 1
+          m_StringArgument: onDied
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnDamage:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHealthCHange:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &2749000515958122416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1767683423889529999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab6ebca36e579d04fbe70989ae4b8070, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7360308384450618616
 GameObject:
   m_ObjectHideFlags: 0
