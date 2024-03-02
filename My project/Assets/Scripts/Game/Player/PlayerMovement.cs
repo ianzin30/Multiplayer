@@ -51,7 +51,6 @@ public class PlayerMovement : MonoBehaviour
     {
         // gets the current tile position and sums with the velocity to check if the next tile is a wall
         Vector3Int playerTilePosition = _tilemap.WorldToCell(transform.position);
-        //Vector2 dir = _rigidbody.velocity.normalized;
 
         if (!_tilemap.HasTile(playerTilePosition + new Vector3Int(1, 0, 0)) && _rigidbody.velocity.x > 0 || !_tilemap.HasTile(playerTilePosition + new Vector3Int(-1, 0, 0)) && _rigidbody.velocity.x < 0)
         {
@@ -61,6 +60,11 @@ public class PlayerMovement : MonoBehaviour
         if (!_tilemap.HasTile(playerTilePosition + new Vector3Int(0, 1, 0)) && _rigidbody.velocity.y > 0 || !_tilemap.HasTile(playerTilePosition + new Vector3Int(0, -1, 0)) && _rigidbody.velocity.y < 0)
         {
             _rigidbody.velocity = new Vector2(_rigidbody.velocity.x, 0);
+        }
+
+        if (!_tilemap.HasTile(playerTilePosition + new Vector3Int(1, 1, 0)) && _rigidbody.velocity.x > 0 && _rigidbody.velocity.y > 0 || !_tilemap.HasTile(playerTilePosition + new Vector3Int(-1, -1, 0)) && _rigidbody.velocity.x < 0 && _rigidbody.velocity.y < 0 || !_tilemap.HasTile(playerTilePosition + new Vector3Int(1, -1, 0)) && _rigidbody.velocity.x > 0 && _rigidbody.velocity.y < 0 || !_tilemap.HasTile(playerTilePosition + new Vector3Int(-1, 1, 0)) && _rigidbody.velocity.x < 0 && _rigidbody.velocity.y > 0)
+        {
+            _rigidbody.velocity = new Vector2(0, 0);
         }
 
     }
