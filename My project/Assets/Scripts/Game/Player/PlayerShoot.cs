@@ -19,6 +19,7 @@ public class PlayerShoot : MonoBehaviour
     private float _shotDelay;
     private float _lastFireTime;
     // Update is called once per frame
+    [SerializeField] private AudioSource _shootSoundEffect;
     void Update()
     {
         if (_fireContinuously) {
@@ -38,6 +39,7 @@ public class PlayerShoot : MonoBehaviour
     }
 
     private void FireBullet() {
+        _shootSoundEffect.Play();
         GameObject bullet = Instantiate(_bulletPrefab, _gunOffset.position, transform.rotation);
 
         Rigidbody2D rigidbody = bullet.GetComponent<Rigidbody2D>();
