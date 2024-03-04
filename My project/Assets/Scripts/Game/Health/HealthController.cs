@@ -20,6 +20,7 @@ public class HealthController : MonoBehaviour
     }
 
     [SerializeField] private AudioSource _deathSoundEffect;
+    [SerializeField] private AudioSource _damageSoundEffect;
 
     public void TakeDamage(float damageAmount)
     {
@@ -44,6 +45,7 @@ public class HealthController : MonoBehaviour
             }
             else
             {
+                _damageSoundEffect.Play();
                 OnDamage.Invoke();
             }
         }
