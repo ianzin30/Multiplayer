@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-
 public class Bullet : MonoBehaviour
 {
     private Camera _camera;
@@ -18,16 +17,13 @@ public class Bullet : MonoBehaviour
         DestroyWhenOffScreen();
     }
 
-    [SerializeField] private AudioSource jumpSoundEffect;
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.GetComponent<EnemyMovement>())
         {
-            jumpSoundEffect.Play();
             HealthController healthController = collision.GetComponent<HealthController>();
             healthController.TakeDamage(10);
-            Destroy(gameObject, jumpSoundEffect.clip.length);
+            Destroy(gameObject);
 
         }
         else
