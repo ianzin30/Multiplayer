@@ -70,6 +70,7 @@ public class PlayerMovement : MonoBehaviour
         Vector2 worldPosition = _camera.ScreenToWorldPoint(mousePosition);
         //Vector2 playerScreenPosition = _camera.ScreenToWorldPoint(transform.position);
         Vector2 direction = worldPosition - (Vector2)transform.position;
+        //Vector2 direction = worldPosition - playerScreenPosition;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
     }

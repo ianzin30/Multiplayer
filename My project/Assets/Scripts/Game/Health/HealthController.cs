@@ -69,4 +69,13 @@ public class HealthController : MonoBehaviour
     public UnityEvent OnDied;
     public UnityEvent OnDamage;
     public UnityEvent OnHealthCHange;
+
+    public void AddKill()
+    {
+        Kills killCounter = GetComponent<Kills>() ?? FindObjectOfType<Kills>();
+        if (killCounter != null)
+        {
+            killCounter.AddKill();
+        }
+    }
 }
