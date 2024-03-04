@@ -8,8 +8,6 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
     private float _speed = 5;
-    [SerializeField]
-    private float _rotationSpeed = 720;
     private Rigidbody2D _rigidbody;
     private Vector2 _movementInput;
     private Vector2 _smoothedMovementInput;
@@ -17,9 +15,6 @@ public class PlayerMovement : MonoBehaviour
     private float _accelerationDelay = 0.1f;
     private Camera _camera;
     [SerializeField]
-    private float _screenBorder;
-    [SerializeField]
-    private Tilemap _tilemap;
     private Animator _animator;
 
     private void Awake()
@@ -29,11 +24,15 @@ public class PlayerMovement : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
+    private void Update()
+    {
+        AdjustPlayerFacingDirection();
+    }
+
     // updated every frame
     private void FixedUpdate()
     {
         SetPlayerVelocity();
-        RotateInDirectionOfInput();
         SetAnimation();
     }
 
@@ -50,16 +49,15 @@ public class PlayerMovement : MonoBehaviour
         _movementInput = inputValue.Get<Vector2>();
     }
 
-    private void RotateInDirectionOfInput()
+    private void AdjustPlayerFacingDirection()
     {
-        // check if the player is moving
-        if (_movementInput != Vector2.zero)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(transform.forward, _smoothedMovementInput);
-            Quaternion rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
-
-            _rigidbody.MoveRotation(rotation);
-        }
+        Vector2 mousePosition = Mouse.current.position.ReadValue();
+        Vector2 worldPosition = _camera.ScreenToWorldPoint(mousePosition);
+        //Vector2 playerScreenPosition = _camera.ScreenToWorldPoint(transform.position);
+        Vector2 direction = worldPosition - (Vector2)transform.position;
+        //Vector2 direction = worldPosition - playerScreenPosition;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
     }
 
     private void SetAnimation()
