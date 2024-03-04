@@ -56,3 +56,6 @@ TagManager:
   - name: Enemy
     uniqueID: 694504201
     locked: 0
+  - name: Carro
+    uniqueID: 2849233767
+    locked: 0
