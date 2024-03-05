@@ -34,6 +34,7 @@ public class HealthController : MonoBehaviour
         // Chama o evento de mudança de saúde para atualizar qualquer outro ouvinte
         OnHealthChange?.Invoke();
     }
+    [SerializeField] private AudioSource _damageSoundEffect;
 
     public void TakeDamage(float damageAmount)
     {
@@ -50,6 +51,7 @@ public class HealthController : MonoBehaviour
         else
         {
             OnDamage?.Invoke();
+                _damageSoundEffect.Play();
         }
     }
 
