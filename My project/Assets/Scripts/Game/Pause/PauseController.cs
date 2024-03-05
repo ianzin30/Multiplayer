@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class PauseController : MonoBehaviour
 {
+    [SerializeField] private string _sceneMenu;
     [SerializeField] private string _sceneName;
     [SerializeField] private GameObject _pausePanel;
     
@@ -39,8 +40,13 @@ public class PauseController : MonoBehaviour
         isPaused = false;
     }
 
+    public void Reiniciar(){
+        Time.timeScale = 1; // Garante que o timeScale é resetado
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
     public void Sair(){
         Time.timeScale = 1; // Garante que o timeScale é resetado
-        SceneManager.LoadScene(_sceneName);
+        SceneManager.LoadScene(_sceneMenu);
     }
 }
