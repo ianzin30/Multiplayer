@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+
 public class HealthController : MonoBehaviour
 {
     [SerializeField]
@@ -21,6 +22,8 @@ public class HealthController : MonoBehaviour
 
     [SerializeField] private AudioSource _deathSoundEffect;
     [SerializeField] private AudioSource _damageSoundEffect;
+    [SerializeField] private AudioSource _damageSoundEffect2;
+    [SerializeField] private AudioSource _damageSoundEffect3;
 
     public void TakeDamage(float damageAmount)
     {
@@ -46,7 +49,19 @@ public class HealthController : MonoBehaviour
             else
             {
                 OnDamage.Invoke();
-                _damageSoundEffect.Play();
+                int randomNumber = UnityEngine.Random.Range(0, 3); // 0 is inclusive, 3 is exclusive
+                switch (randomNumber)
+                {
+                    case 0:
+                        _damageSoundEffect.Play();
+                        break;
+                    case 1:
+                        _damageSoundEffect2.Play();
+                        break;
+                    case 2:
+                        _damageSoundEffect3.Play();
+                        break;
+                }
             }
         }
 
