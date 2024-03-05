@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,68 +6,62 @@ public class HealthController : MonoBehaviour
     [SerializeField]
     private float _currentHealth;
     [SerializeField]
-    private float _maximumHeath;
+    private float _maximumHealth;
+    public HealthBarUI healthBarUI; // Referência para a barra de vida UI
+
     public bool IsInvincible { get; set; }
 
-    public float RemainingHealthPercentage
-    {
-        get
-        {
-            return _currentHealth / _maximumHeath;
-        }
-    }
+    public float RemainingHealthPercentage => _currentHealth / _maximumHealth;
 
     [SerializeField] private AudioSource _deathSoundEffect;
 
+    // Eventos para comunicar mudanças de estado
+    public UnityEvent OnDied;
+    public UnityEvent OnDamage;
+    public UnityEvent OnHealthChange;
+
+    private void Start()
+    {
+        // Certifique-se de que a saúde não comece com um valor inválido
+        _currentHealth = Mathf.Clamp(_currentHealth, 0, _maximumHealth);
+
+        // Atualiza a UI da barra de vida no início para refletir a saúde inicial
+        if (healthBarUI != null)
+        {
+            healthBarUI.UpdateHealthBar(this);
+        }
+
+        // Chama o evento de mudança de saúde para atualizar qualquer outro ouvinte
+        OnHealthChange?.Invoke();
+    }
+
     public void TakeDamage(float damageAmount)
     {
+        if (_currentHealth <= 0 || IsInvincible) return;
+
+        _currentHealth = Mathf.Max(_currentHealth - damageAmount, 0);
+        OnHealthChange?.Invoke();
+
         if (_currentHealth == 0)
         {
-            return;
+            _deathSoundEffect.Play();
+            OnDied?.Invoke();
         }
-
-        if (!IsInvincible)
+        else
         {
-            _currentHealth -= damageAmount;
-            OnHealthCHange.Invoke();
-            if (_currentHealth < 0)
-            {
-                _currentHealth = 0;
-            }
-
-            if (_currentHealth == 0)
-            {
-                _deathSoundEffect.Play();
-                OnDied.Invoke();
-            }
-            else
-            {
-                OnDamage.Invoke();
-            }
+            OnDamage?.Invoke();
         }
-
     }
 
     public void AddHealth(float amountToAdd)
     {
-        if (_currentHealth == _maximumHeath)
-        {
-            return;
-        }
+        if (_currentHealth >= _maximumHealth) return;
 
-        _currentHealth += amountToAdd;
-        OnHealthCHange.Invoke();
-
-        if (_currentHealth > _maximumHeath)
-        {
-            _currentHealth = _maximumHeath;
-        }
+        _currentHealth = Mathf.Min(_currentHealth + amountToAdd, _maximumHealth);
+        OnHealthChange?.Invoke();
     }
 
-    public UnityEvent OnDied;
-    public UnityEvent OnDamage;
-    public UnityEvent OnHealthCHange;
-
+    // Certifique-se de que a função AddKill é realmente necessária aqui. Se for, tudo bem.
     public void AddKill()
     {
         Kills killCounter = GetComponent<Kills>() ?? FindObjectOfType<Kills>();

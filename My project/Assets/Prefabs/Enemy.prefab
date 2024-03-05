@@ -179,7 +179,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentHealth: 10
-  _maximumHeath: 10
+  _maximumHealth: 10
+  healthBarUI: {fileID: 0}
   _deathSoundEffect: {fileID: -8756612614171615530}
   OnDied:
     m_PersistentCalls:
@@ -259,7 +260,7 @@ MonoBehaviour:
   OnDamage:
     m_PersistentCalls:
       m_Calls: []
-  OnHealthCHange:
+  OnHealthChange:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &2749000515958122416
