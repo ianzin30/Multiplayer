@@ -80,4 +80,13 @@ public class HealthController : MonoBehaviour
             killCounter.AddKill();
         }
     }
+
+    public void DeathPause()
+    {
+        PauseController pauseController = FindObjectOfType<PauseController>();
+        if (pauseController != null)
+        {
+            pauseController.Pausar();
+        }
+    }
 }
