@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -34,24 +36,46 @@ public class HealthController : MonoBehaviour
         // Chama o evento de mudança de saúde para atualizar qualquer outro ouvinte
         OnHealthChange?.Invoke();
     }
+
     [SerializeField] private AudioSource _damageSoundEffect;
+    [SerializeField] private AudioSource _damageSoundEffect2;
+    [SerializeField] private AudioSource _damageSoundEffect3;
 
     public void TakeDamage(float damageAmount)
     {
-        if (_currentHealth <= 0 || IsInvincible) return;
+        if (_currentHealth <= 0) return;
 
-        _currentHealth = Mathf.Max(_currentHealth - damageAmount, 0);
-        OnHealthChange?.Invoke();
+        if (!IsInvincible)
+        {
+            _currentHealth = Mathf.Max(_currentHealth - damageAmount, 0);
+            OnHealthChange?.Invoke();
+            if (_currentHealth < 0)
+            {
+                _currentHealth = 0;
+            }
 
-        if (_currentHealth == 0)
-        {
-            _deathSoundEffect.Play();
-            OnDied?.Invoke();
-        }
-        else
-        {
-            OnDamage?.Invoke();
-                _damageSoundEffect.Play();
+            if (_currentHealth == 0)
+            {
+                _deathSoundEffect.Play();
+                OnDied.Invoke();
+            }
+            else
+            {
+                OnDamage.Invoke();
+                int randomNumber = UnityEngine.Random.Range(0, 3); // 0 is inclusive, 3 is exclusive
+                switch (randomNumber)
+                {
+                    case 0:
+                        _damageSoundEffect.Play();
+                        break;
+                    case 1:
+                        _damageSoundEffect2.Play();
+                        break;
+                    case 2:
+                        _damageSoundEffect3.Play();
+                        break;
+                }
+            }
         }
     }
 
@@ -61,15 +85,28 @@ public class HealthController : MonoBehaviour
 
         _currentHealth = Mathf.Min(_currentHealth + amountToAdd, _maximumHealth);
         OnHealthChange?.Invoke();
+
+        if (_currentHealth > _maximumHealth)
+        {
+            _currentHealth = _maximumHealth;
+        }
     }
 
-    // Certifique-se de que a função AddKill é realmente necessária aqui. Se for, tudo bem.
     public void AddKill()
     {
         Kills killCounter = GetComponent<Kills>() ?? FindObjectOfType<Kills>();
         if (killCounter != null)
         {
             killCounter.AddKill();
+        }
+    }
+
+    public void DeathPause()
+    {
+        PauseController pauseController = FindObjectOfType<PauseController>();
+        if (pauseController != null)
+        {
+            pauseController.Pausar();
         }
     }
 }
