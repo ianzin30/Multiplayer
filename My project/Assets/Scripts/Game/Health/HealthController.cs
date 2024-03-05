@@ -45,8 +45,8 @@ public class HealthController : MonoBehaviour
             }
             else
             {
-                _damageSoundEffect.Play();
                 OnDamage.Invoke();
+                _damageSoundEffect.Play();
             }
         }
 
