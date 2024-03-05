@@ -17,15 +17,19 @@ public class PlayerShoot : MonoBehaviour
     private Transform _gunOffset;
     [SerializeField]
     private float _shotDelay;
+    [SerializeField]
+    private float _shotDelayBase;
     private float _lastFireTime;
     // Update is called once per frame
     [SerializeField] private AudioSource _shootSoundEffect;
     void Update()
     {
-        if (_fireContinuously) {
+        if (_fireContinuously)
+        {
             float timeSinceLastFire = Time.time - _lastFireTime;
 
-            if (timeSinceLastFire >= _shotDelay) {
+            if (timeSinceLastFire >= _shotDelay)
+            {
                 FireBullet();
 
                 _lastFireTime = Time.time;
@@ -33,17 +37,31 @@ public class PlayerShoot : MonoBehaviour
         }
     }
 
-    private void OnFire(InputValue inputvalue) {
+    private void OnFire(InputValue inputvalue)
+    {
         _fireContinuously = inputvalue.isPressed;
 
     }
 
-    private void FireBullet() {
+    private void FireBullet()
+    {
         _shootSoundEffect.Play();
         GameObject bullet = Instantiate(_bulletPrefab, _gunOffset.position, transform.rotation);
 
         Rigidbody2D rigidbody = bullet.GetComponent<Rigidbody2D>();
 
         rigidbody.velocity = _bulletSpeed * transform.up;
+    }
+
+    public void IncreaseFireRate(float fireUpAmount, float fireUpDuration)
+    {
+        _shotDelay = _shotDelay / fireUpAmount;
+        StartCoroutine(ResetFireRate(fireUpDuration));
+    }
+
+    private IEnumerator ResetFireRate(float fireUpDuration)
+    {
+        yield return new WaitForSeconds(fireUpDuration);
+        _shotDelay = _shotDelayBase;
     }
 }
